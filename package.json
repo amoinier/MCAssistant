@@ -1,0 +1,59 @@
+{
+  "name": "movies-renamer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.4",
+    "@fortawesome/free-brands-svg-icons": "^5.3.1",
+    "@fortawesome/free-regular-svg-icons": "^5.3.1",
+    "@fortawesome/free-solid-svg-icons": "^5.3.1",
+    "@fortawesome/react-fontawesome": "^0.1.3",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "electron": "^4.0.0-nightly.20180929",
+    "electron-prebuilt": "^1.4.13",
+    "i": "^0.3.6",
+    "npm": "^6.4.1",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-dropzone": "^6.0.2",
+    "react-fontawesome": "^1.6.1",
+    "react-router-dom": "^4.3.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.0",
+    "electron-packager": "^12.2.0",
+    "electron-rebuild": "^1.8.2",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "node-libs-browser": "^2.1.0",
+    "style-loader": "^0.23.0",
+    "webpack": "^4.20.2",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "scripts": {
+    "test": "nodemon main.js",
+    "start": "./node_modules/electron-prebuilt/dist/electron .",
+    "watch": "./node_modules/.bin/webpack-dev-server",
+    "electron-rebuild": "./node_modules/.bin/electron-rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amoinier/Movies-renamer.git"
+  },
+  "author": "amoinier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amoinier/Movies-renamer/issues"
+  },
+  "homepage": "https://github.com/amoinier/Movies-renamer#readme"
+}
