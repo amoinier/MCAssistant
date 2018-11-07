@@ -1,4 +1,5 @@
 var webpack = require('webpack')
+var nodeExternals = require('webpack-node-externals')
 const path = require('path')
 
 module.exports = {
@@ -22,11 +23,19 @@ module.exports = {
             babelrc: false,
             presets: [
                 ["@babel/env"],"@babel/react"],
+            plugins: [
+              ['@babel/plugin-proposal-decorators', {legacy: true}],
+              ['@babel/plugin-proposal-class-properties', {loose: true}]
+            ]
         }
       },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.less$/, loader: 'style-loader!css-loader!less-loader'}
     ]
+  },
+  target: 'node',
+  node: {
+    fs: 'empty'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()

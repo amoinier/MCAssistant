@@ -3,6 +3,10 @@
 @dark-theme: #1a222a;
 @white: #ffffff;
 
+::-webkit-scrollbar { 
+  display: none; 
+}
+
 body {
   background-color: @theme;
   font-family: Helvetica;
@@ -23,6 +27,7 @@ div.main {
   grid-template-rows: 20vh auto;
 
   height: 100%;
+  overflow: hidden;
 }
 
 div.header {
@@ -40,12 +45,16 @@ div.body {
 }
 
 div.dragdrop {
-  justify-items: center;
   align-items: center;
   display: grid;
 
   color: @dark-theme;
-  font-size: 30px; 
+  font-size: 30px;
+
+  div.hidedrag {
+    padding: 0;
+    border: none;
+  }
 
   div.blockdrag {
     padding: 100px;
@@ -60,5 +69,35 @@ div.dragdrop {
 
     font-size: 60px;
     padding: 20px;
+  }
+}
+
+div.details {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+
+  overflow-y: scroll;
+  height: 80vh;
+
+  div.detailsFile {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    padding: 10px;
+    border-bottom: 2px solid @dark-theme;
+    box-shadow: inset 0px 1px 4px @dark-theme;
+
+    div.infos {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+
+      div.title {
+        font-size: 25px;
+      }
+  
+      div.year {
+        font-style: italic;
+      }
+    }
   }
 }
