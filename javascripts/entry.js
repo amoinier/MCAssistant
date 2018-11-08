@@ -38,6 +38,9 @@ class Index extends Component {
                         }
                     </DragDrop>
                 </div>
+                <div className='footer'>
+
+                </div>
             </div>
         )
     }

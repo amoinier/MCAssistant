@@ -14,6 +14,7 @@ body {
   margin: 0;
   width: 100vw;
   height: 100vh;
+  box-sizing: border-box;
 }
 
 div#content {
@@ -24,7 +25,7 @@ div#content {
 div.main {
   display: grid;
   grid-template-columns: repeat(50, 1fr);
-  grid-template-rows: 20vh auto;
+  grid-template-rows: 20vh auto 10vh;
 
   height: 100%;
   overflow: hidden;
@@ -41,6 +42,14 @@ div.body {
   display: grid;
 
   background-color: @light-theme;
+  box-shadow: inset 0px 3px 10px @dark-theme;
+}
+
+div.footer {
+  grid-column: ~"1 / -1";
+  grid-row: 3;
+  display: grid;
+
   box-shadow: inset 0px 3px 10px @dark-theme;
 }
 
@@ -74,30 +83,58 @@ div.dragdrop {
 
 div.details {
   display: grid;
-  grid-template-rows: repeat(10, 1fr);
+  grid-auto-rows: 10vh;
 
   overflow-y: scroll;
-  height: 80vh;
+  height: 70.5vh;
+  color: @white;
+  // text-shadow: -2px 0 @dark-theme, 0 2px @dark-theme, 2px 0 @dark-theme, 0 -2px @dark-theme;
 
   div.detailsFile {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 33.33%);
 
     padding: 10px;
     border-bottom: 2px solid @dark-theme;
     box-shadow: inset 0px 1px 4px @dark-theme;
+    cursor: pointer;
 
-    div.infos {
+    div.infos, div.newinfos {
       display: grid;
-      grid-template-rows: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 33.33%);
+
+      word-break: break-word;
 
       div.title {
-        font-size: 25px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      div.seriesinfo {
+        font-style: italic;
+        font-size: 16px;
+        align-self: center;
       }
   
-      div.year {
+      span.year {
         font-style: italic;
+        font-size: 16px;
+      }
+
+      div.filename {
+        font-style: italic;
+        font-size: 16px;
       }
     }
+
+    div.arrowleft {
+      justify-self: center;
+      align-self: center;
+    }
+
+    div.newinfos {
+      justify-self: right;
+    }
+
   }
 }

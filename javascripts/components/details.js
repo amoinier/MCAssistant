@@ -8,6 +8,7 @@ import async from 'async'
 import parseVideo from 'video-name-parser'
 
 import store from '../tools/store'
+import utils from '../tools/utils'
 
 import DetailsFile from './detailsFile'
 
@@ -16,31 +17,11 @@ class Details extends Component {
     componentWillMount() {
     }
 
-    onDrop(files) {
-        files.forEach(elem => {
-            if (fs.lstatSync(elem.path).isDirectory()) {
-                recursiveFolderContent(elem.path, err => {
-
-                })
-            }
-            else {
-                let parsed = ptn(elem.path.substr(elem.path.lastIndexOf('/') + 1, elem.path.length))
-                parsed.datas = parseVideo(elem.path.substr(elem.path.lastIndexOf('/') + 1, elem.path.length))
-                parsed.path = elem.path
-                store.addFile(parsed)
-
-                console.log(parsed);
-                
-            }
-        })  
-
-    }
-
     render() {
         return (
             <div className='details'>
                 {store.files.map((elem, index) => {
-                    return (<DetailsFile info={elem} key={index} />)
+                    return (<DetailsFile elem={elem} key={index} />)
                 })}
             </div>
 

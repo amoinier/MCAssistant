@@ -2,6 +2,9 @@ import { observable, action } from 'mobx'
 
 class Store {
     @observable files = []
+    @observable lang = 'en-US'
+    @observable tmdb_api_key = ''
+    @observable clicked = {}
 
     @action addFile(file) {
         this.files = this.files.concat(file);
