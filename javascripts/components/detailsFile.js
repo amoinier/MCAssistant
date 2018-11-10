@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileMedical, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import ReactDropzone from "react-dropzone"
 import { observer } from 'mobx-react'
-import ptn from 'parse-torrent-name'
 import fs from 'fs'
 import async from 'async'
 
@@ -16,10 +14,8 @@ class DetailsFile extends Component {
     }
 
     render() {
-        console.log(this.props.elem.datas);
-        
         return (
-            <div className='detailsFile'>
+            <div className={'detailsFile' + (store.clicked_index === this.props.index ? ' detailsclicked' : '')} onClick={this.props.onClick}>
                 <div className="infos">
                     <div className='title'>
                         {utils.wordLetterUppercase(this.props.elem.datas.name)} {this.props.elem.year ? <span className='year'>({this.props.elem.year})</span> : ''}

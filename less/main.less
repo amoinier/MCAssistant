@@ -33,7 +33,56 @@ div.main {
 
 div.header {
   grid-column: ~"1 / -1";
+  display: grid;
+  grid-template-rows: 1fr;
 
+  div.selected {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    padding: 10px;
+    color: @white;
+
+    div.title {
+      font-size: 30px;
+      border-bottom: 5px solid @dark-theme;
+      border-radius: 3px;
+      padding-bottom: 10px;
+      padding-left: 10px;
+
+      span.year {
+        font-style: italic;
+      }
+    }
+
+    div.editpart {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+
+      padding: 10px 0px;
+
+      div.editname {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+
+        input, select {
+          padding: 10px;
+          border: none;
+          background-color: @dark-theme;
+          color: @white;
+          outline: none;
+        }
+
+        select {
+          margin-bottom: 20px;
+        }
+
+        input {
+          
+        }
+      }
+    }
+  }
 }
 
 div.body {
@@ -51,6 +100,9 @@ div.footer {
   display: grid;
 
   box-shadow: inset 0px 3px 10px @dark-theme;
+  padding: 10px;
+  justify-content: right;
+  align-items: center;
 }
 
 div.dragdrop {
@@ -77,7 +129,7 @@ div.dragdrop {
     justify-items: center;
 
     font-size: 60px;
-    padding: 20px;
+    padding: 10px;
   }
 }
 
@@ -90,6 +142,10 @@ div.details {
   color: @white;
   // text-shadow: -2px 0 @dark-theme, 0 2px @dark-theme, 2px 0 @dark-theme, 0 -2px @dark-theme;
 
+  div.detailsclicked {
+    background-color: @dark-theme;
+  }
+
   div.detailsFile {
     display: grid;
     grid-template-columns: repeat(3, 33.33%);
@@ -98,6 +154,7 @@ div.details {
     border-bottom: 2px solid @dark-theme;
     box-shadow: inset 0px 1px 4px @dark-theme;
     cursor: pointer;
+    transition: 0.2s;
 
     div.infos, div.newinfos {
       display: grid;
@@ -137,4 +194,26 @@ div.details {
     }
 
   }
+}
+
+div.button {
+
+  button {
+    border: none;
+    padding: 10px 20px;
+    font-size: 22px;
+    border-radius: 2px;
+    background-color: @white;
+    color: @light-theme;
+    box-shadow: 0px 0px 5px 2px @dark-theme;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    opacity: 0.6;
+    outline: none;
+  }
+
 }

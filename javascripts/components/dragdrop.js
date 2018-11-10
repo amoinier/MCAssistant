@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileMedical } from '@fortawesome/free-solid-svg-icons'
 import ReactDropzone from "react-dropzone"
 import { observer } from 'mobx-react'
 import ptn from 'parse-torrent-name'
