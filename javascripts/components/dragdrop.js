@@ -25,13 +25,9 @@ class DragDrop extends Component {
             }
             else {
                 if (!checkIfExist(elem.path)) {
-                    let parsed = ptn(utils.pathToFilename(elem.path))
-                    parsed.datas = parseVideo(utils.pathToFilename(elem.path))
-                    parsed.path = elem.path
-                    parsed.rename = []
-                    store.addFile(parsed)
+                    let parsed = prepareParsedObj(elem.path)
+                    store.addFile(parsed)                    
                     getFileRealInfo(parsed, store.files.length - 1, () => {})
-                    console.log(parsed);
                 }
 
             }
@@ -40,12 +36,12 @@ class DragDrop extends Component {
     }
 
     render() {
-            return (
-                <div className='dragdrop' style={store.files.length == 0 ? {justifySelf: 'center'} : {}}>
-                    <ReactDropzone className={store.files.length == 0 ? 'blockdrag' : 'hidedrag'} disableClick={store.files.length == 0 ? false : true} onDrop={this.onDrop}>
-                        {this.props.children}
-                    </ReactDropzone>
-                </div>
+        return (
+            <div className='dragdrop' style={store.files.length == 0 ? {justifySelf: 'center'} : {}}>
+                <ReactDropzone className={store.files.length == 0 ? 'blockdrag' : 'hidedrag'} disableClick={store.files.length == 0 ? false : true} onDrop={this.onDrop}>
+                    {this.props.children}
+                </ReactDropzone>
+            </div>
         )
     }
 }
@@ -66,10 +62,7 @@ let recursiveFolderContent = (folder, cb) => {
             async.eachOf(files, (elem, index, each_cb) => {
                 if (!fs.lstatSync(`${folder}/${elem}`).isSymbolicLink() && !fs.lstatSync(`${folder}/${elem}`).isDirectory()) {
                     if (!checkIfExist(`${folder}/${elem}`)) {
-                        let parsed = ptn(utils.pathToFilename(`${folder}/${elem}`))
-                        parsed.datas = parseVideo(utils.pathToFilename(`${folder}/${elem}`))
-                        parsed.path = `${folder}/${elem}`
-                        parsed.rename = []
+                        let parsed = prepareParsedObj(`${folder}/${elem}`)
                         store.addFile(parsed)
                         getFileRealInfo(parsed, store.files.length - 1, () => {})
                     }
@@ -87,6 +80,27 @@ let recursiveFolderContent = (folder, cb) => {
     })
 }
 
+let prepareParsedObj = (path) => {
+    let parsed = ptn(utils.pathToFilename(path))
+    let datas = parseVideo(utils.pathToFilename(path))
+
+    parsed.type = datas.type
+    parsed.year = (!parsed.year ? [datas.year] : (parsed.year != datas.year ? [parsed.year, datas.year] : [parsed.year]))
+    parsed.title = [parsed.title, datas.name].map(el => {return el ? utils.delFileExtenstion(el).normalize('NFD').replace(/[\u0300-\u036f]/g, "") : ''}).filter(Boolean)
+    parsed.path = path
+    parsed.season = datas.season
+    parsed.episode = datas.episode
+    parsed.rename = [];
+    ['resolution', 'quality', 'group', 'excess', 'audio', 'codec'].map(e => delete parsed[e])
+
+    if (parsed.length == 2 && parsed.title[0].replace(/\s/gmi, '').toLowerCase() == parsed.title[1].replace(/\s/gmi, '').toLowerCase()) {
+        parsed.title = [parsed.title[0]]
+    }
+    parsed.proposals = utils.getAllProposalNames(parsed.title[0])
+
+    return parsed
+}
+
 let checkIfExist = (path) => {
     for (var i = 0; i < store.files.length; i++) {
         if (store.files[i].path == path)
@@ -99,24 +113,29 @@ let checkIfExist = (path) => {
 }
 
 let getFileRealInfo = (file, index, cb) => {
-    let url;
+    async.eachOfLimit(file.proposals, 3, (tit, tkey, tcb) => {
+        async.eachOfLimit(file.year, 3, (yea, ykey, ycb) => {
+            let url
 
-    if (file.datas.type == 'series') {
-        url = `https://api.themoviedb.org/3/search/tv?api_key=${store.tmdb_api_key}&language=${store.lang}&query=${file.datas.name}&page=1&include_adult=true`;
-    }
-    else {
-        url = `https://api.themoviedb.org/3/search/movie?api_key=${store.tmdb_api_key}&language=${store.lang}&query=${file.datas.name}${file.year ? `&year=${file.year}` : ``}&page=1&include_adult=true`;
-    }
-    axios.get(url)
-    .then(resp => {
-        console.log(resp)
-
-        store.files[index].rename = store.files[index].rename.concat(resp.data.results)
-        
-        return cb()
-    })
-    .catch(err => {
-        console.log(err)
-        return cb()
+            if (file.type == 'series') {
+                url = `https://api.themoviedb.org/3/search/tv?api_key=${store.tmdb_api_key}&language=${store.lang}&query=${tit}&page=1&include_adult=true`;
+            }
+            else {
+                url = `https://api.themoviedb.org/3/search/movie?api_key=${store.tmdb_api_key}&language=${store.lang}&query=${tit}${yea ? `&primary_release_year=${yea}` : ``}&page=1&include_adult=true`;
+            }
+            axios.get(url)
+            .then(resp => {
+                store.files[index].rename = store.files[index].rename.concat(resp.data.results)
+                
+                return ycb()
+            })
+            .catch(err => {
+                return ycb(err)
+            })
+        }, (err) => {
+            return tcb(err)
+        })
+    }, (err) => {
+        return cb(err)
     })
 }
