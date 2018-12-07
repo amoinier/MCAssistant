@@ -13,6 +13,7 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1360, height: 800, webPreferences: {experimentalFeatures: true}})
   mainWindow.loadURL(`file://${__dirname}/public/index.html`)
   mainWindow.setMenu(null)
+  mainWindow.openDevTools() 
   mainWindow.on('closed', function() {
     mainWindow = null;
   })

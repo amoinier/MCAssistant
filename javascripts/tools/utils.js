@@ -64,6 +64,8 @@ module.exports = {
         async.eachOfLimit(file.proposals, 3, (tit, tkey, tcb) => {
             async.eachOfLimit(file.year, 3, (yea, ykey, ycb) => {
                 let url
+
+                yea = option.use_year ? yea : null
     
                 if (file.type == 'series') {
                     url = `https://api.themoviedb.org/3/search/tv?api_key=${option.tmdb_api_key}&language=${option.lang}&query=${tit}&page=1&include_adult=true`;

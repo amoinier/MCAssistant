@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 
-import store from '../tools/store'
-
-import DetailsFile from './detailsFile'
-
 @observer
 class Button extends Component {
     componentWillMount() {

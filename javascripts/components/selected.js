@@ -9,20 +9,24 @@ import Button from './button.js'
 
 @observer
 class Selected extends Component {
-    
+
     constructor(props) {
         super(props)
 
         this.state = {
+            rename: this.props.file.rename,
             searchName: this.props.file.title[0],
-            selected: this.props.file.selected
+            selected: this.props.file.selected,
+            selected_index: 0,
         }
     }
 
     componentDidMount() {
         this.setState({
+            rename: this.props.file.rename,
             searchName: this.props.file.title[0],
-            selected: this.props.file.selected
+            selected: this.props.file.selected,
+            selected_index: 0,
         })        
     }
 
@@ -30,8 +34,10 @@ class Selected extends Component {
         this.props = nextProps
 
         this.setState({
+            rename: this.props.file.rename,
             searchName: this.props.file.title[0],
-            selected: this.props.file.selected
+            selected: this.props.file.selected,
+            selected_index: 0,
         })
     }
 
@@ -44,7 +50,8 @@ class Selected extends Component {
 
     selectOther(e) {
         this.setState({
-            selected: this.props.file.rename[e.target.value]
+            selected: this.props.file.rename[e.target.value],
+            selected_index: e.target.value,
         })
 
         store.files[store.clicked_index].selected = this.props.file.rename[e.target.value]
@@ -54,18 +61,18 @@ class Selected extends Component {
         e.preventDefault()
         
         this.props.file.proposals = utils.getAllProposalNames(this.state.searchName)
-        this.props.file.year = ['']
         store.files[store.clicked_index].proposals = utils.getAllProposalNames(this.state.searchName)
-        store.files[store.clicked_index].year = ['']
 
-        utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
+        utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.tmdb_api_key, lang: store.lang, use_year: false}, (err, renames) => {
             this.props.file.rename = renames
             this.props.file.selected = renames[0]
             store.files[store.clicked_index].rename = renames
             store.files[store.clicked_index].selected = renames[0]
 
             this.setState({
-                selected: renames[0]
+                rename: renames,
+                selected: renames[0],
+                selected_index: 0,
             })
         })
     }
@@ -85,8 +92,8 @@ class Selected extends Component {
 
                 <div className='editpart'>
                     <div className='editname'>
-                        <select onChange={this.selectOther.bind(this)}>
-                            {this.props.file.rename.map((elem, ind) => {
+                        <select onChange={this.selectOther.bind(this)} value={this.state.selected_index}>
+                            {this.state.rename.map((elem, ind) => {
                                 return (
                                     <option key={ind} value={ind}>{elem.title || elem.name}</option>
                                 )

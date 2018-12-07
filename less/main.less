@@ -75,11 +75,12 @@ div.header {
 
         select {
           margin-bottom: 10px;
+          width: 100%;
         }
 
         div.edittitle {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 70% auto;
 
           margin-top: 10px;
         }
@@ -97,6 +98,12 @@ div.header {
 
         div.title {
           border: none;
+        }
+
+        div.filename {
+          font-style: italic;
+          font-size: 16px;
+          text-align: right;
         }
       }
     }
@@ -170,7 +177,7 @@ div.details {
 
     padding: 10px;
     border-bottom: 2px solid @dark-theme;
-    box-shadow: inset 0px 1px 4px @dark-theme;
+    box-shadow: inset 0px -1px 4px @dark-theme;
     cursor: pointer;
     transition: 0.2s;
     outline: none;
@@ -200,6 +207,16 @@ div.details {
       div.filename {
         font-style: italic;
         font-size: 16px;
+      }
+    }
+
+    div.newinfos {
+      div.title {
+        text-align: right;
+      }
+
+      div.filename {
+        text-align: right;
       }
     }
 
