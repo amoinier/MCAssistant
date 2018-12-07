@@ -3,7 +3,7 @@ import { observable, action } from 'mobx'
 class Store {
     @observable files = []
     @observable lang = 'en-US'
-    @observable tmdb_api_key = '3ceac6ccace8dbacd6a9aaac2d1c15eb'
+    @observable tmdb_api_key = ''
     @observable clicked_index = -1
 
     @action addFile(file) {
@@ -16,6 +16,10 @@ class Store {
 
     @action getFiles() {
         return this.files
+    }
+
+    @action deleteFiles(index) {
+        this.files.splice(index, 1)
     }
 }
 

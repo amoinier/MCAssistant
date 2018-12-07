@@ -4,8 +4,8 @@ import { observer } from 'mobx-react'
 import ptn from 'parse-torrent-name'
 import fs from 'fs'
 import async from 'async'
-import axios from 'axios'
 import parseVideo from 'video-name-parser'
+import uuidv4 from 'uuid/v4'
 
 import store from '../tools/store'
 import utils from '../tools/utils'
@@ -17,22 +17,31 @@ class DragDrop extends Component {
     }
 
     onDrop(files) {
-        files.forEach((elem) => {
-            if (fs.lstatSync(elem.path).isDirectory()) {
-                recursiveFolderContent(elem.path, err => {
-
-                })
-            }
-            else {
-                if (!checkIfExist(elem.path)) {
-                    let parsed = prepareParsedObj(elem.path)
-                    store.addFile(parsed)                    
-                    getFileRealInfo(parsed, store.files.length - 1, () => {})
+        async.eachOfLimit(files, 5, (elem, index, each_cb) => {
+            if (fs.existsSync(elem.path)) {
+                if (fs.lstatSync(elem.path).isDirectory()) {
+                    recursiveFolderContent(elem.path, err => {
+                        return each_cb(err)                
+                    })
                 }
+                else {
+                    if (!checkPathFile(elem.path)) {
+                        let index
+                        let parsed = prepareParsedObj(elem.path)
+                        store.addFile(parsed)
+                        index = utils.findElemByUuid(parsed.uuid, store.files)
+                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
+                            store.files[index].rename = renames
+                            store.files[index].selected = renames[0]
+                            return each_cb(err)                
+                        })
+                    }
 
+                }
             }
+        }, (err) => {
+            return err
         })  
-
     }
 
     render() {
@@ -56,15 +65,20 @@ let recursiveFolderContent = (folder, cb) => {
 
     fs.readdir(folder, (err, files) => {
         if (err) {
-            return each_cb()
+            return cb()
         }
         else {
-            async.eachOf(files, (elem, index, each_cb) => {
+            async.eachOfLimit(files, 3, (elem, index, each_cb) => {
                 if (!fs.lstatSync(`${folder}/${elem}`).isSymbolicLink() && !fs.lstatSync(`${folder}/${elem}`).isDirectory()) {
-                    if (!checkIfExist(`${folder}/${elem}`)) {
+                    if (!checkPathFile(`${folder}/${elem}`)) {
+                        let index
                         let parsed = prepareParsedObj(`${folder}/${elem}`)
                         store.addFile(parsed)
-                        getFileRealInfo(parsed, store.files.length - 1, () => {})
+                        index = utils.findElemByUuid(parsed.uuid, store.files)
+                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
+                            store.files[index].rename = renames
+                            store.files[index].selected = renames[0]
+                        })
                     }
                     return each_cb()
                 }
@@ -84,6 +98,8 @@ let prepareParsedObj = (path) => {
     let parsed = ptn(utils.pathToFilename(path))
     let datas = parseVideo(utils.pathToFilename(path))
 
+    parsed.uuid = uuidv4()
+    parsed.ref = React.createRef()
     parsed.type = datas.type
     parsed.year = (!parsed.year ? [datas.year] : (parsed.year != datas.year ? [parsed.year, datas.year] : [parsed.year]))
     parsed.title = [parsed.title, datas.name].map(el => {return el ? utils.delFileExtenstion(el).normalize('NFD').replace(/[\u0300-\u036f]/g, "") : ''}).filter(Boolean)
@@ -101,7 +117,11 @@ let prepareParsedObj = (path) => {
     return parsed
 }
 
-let checkIfExist = (path) => {
+let checkPathFile = (path) => {
+    if (utils.listExtensions().indexOf(utils.getFileExtension(path)) == -1) {
+        return true
+    }
+
     for (var i = 0; i < store.files.length; i++) {
         if (store.files[i].path == path)
         {
@@ -110,32 +130,4 @@ let checkIfExist = (path) => {
     }
 
     return false
-}
-
-let getFileRealInfo = (file, index, cb) => {
-    async.eachOfLimit(file.proposals, 3, (tit, tkey, tcb) => {
-        async.eachOfLimit(file.year, 3, (yea, ykey, ycb) => {
-            let url
-
-            if (file.type == 'series') {
-                url = `https://api.themoviedb.org/3/search/tv?api_key=${store.tmdb_api_key}&language=${store.lang}&query=${tit}&page=1&include_adult=true`;
-            }
-            else {
-                url = `https://api.themoviedb.org/3/search/movie?api_key=${store.tmdb_api_key}&language=${store.lang}&query=${tit}${yea ? `&primary_release_year=${yea}` : ``}&page=1&include_adult=true`;
-            }
-            axios.get(url)
-            .then(resp => {
-                store.files[index].rename = store.files[index].rename.concat(resp.data.results)
-                
-                return ycb()
-            })
-            .catch(err => {
-                return ycb(err)
-            })
-        }, (err) => {
-            return tcb(err)
-        })
-    }, (err) => {
-        return cb(err)
-    })
 }

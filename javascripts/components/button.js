@@ -12,9 +12,9 @@ class Button extends Component {
 
     render() {
         return (
-            <div className='button'>
-                <button>
-                    Save
+            <div className={`button ${this.props.buttclass}`}>
+                <button onClick={this.props.click.bind(this)}>
+                    {this.props.text}
                 </button>
             </div>
 

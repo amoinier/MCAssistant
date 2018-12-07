@@ -4,7 +4,6 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.7",
@@ -16,8 +15,6 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
-    "electron": "^4.0.0-nightly.20181010",
-    "electron-prebuilt": "^1.4.13",
     "get-video-info": "^1.0.0",
     "i": "^0.3.6",
     "mediainfo-parser": "^1.1.5",
@@ -30,10 +27,14 @@
     "react-dropzone": "^6.2.4",
     "react-fontawesome": "^1.6.1",
     "react-router-dom": "^4.3.1",
+    "uuid": "^3.3.2",
     "video-name-parser": "^1.4.6",
     "webpack-cli": "^3.1.2"
   },
   "devDependencies": {
+    "electron-prebuilt": "^1.4.13",
+    "electron": "^4.0.0-nightly.20181010",
+    "@babel/core": "^7.1.6",
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
@@ -41,6 +42,7 @@
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-preset-mobx": "^2.0.0",
     "css-loader": "^1.0.1",
+    "electron-builder": "^20.38.0",
     "electron-packager": "^12.2.0",
     "electron-rebuild": "^1.8.2",
     "less": "^3.8.1",
@@ -55,11 +57,19 @@
     "test": "nodemon main.js",
     "start": "./node_modules/electron-prebuilt/dist/electron .",
     "watch": "./node_modules/.bin/webpack-dev-server",
-    "electron-rebuild": "./node_modules/.bin/electron-rebuild"
+    "electron-rebuild": "./node_modules/.bin/electron-rebuild",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amoinier/Movies-renamer.git"
+  },
+  "build": {
+    "appId": "your.id",
+    "mac": {
+      "category": "your.app.category.type"
+    }
   },
   "author": "amoinier",
   "license": "MIT",

@@ -57,7 +57,7 @@ div.header {
 
     div.editpart {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 40% 20% 40%;
 
       padding: 10px 0px;
 
@@ -74,11 +74,29 @@ div.header {
         }
 
         select {
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
 
-        input {
-          
+        div.edittitle {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+
+          margin-top: 10px;
+        }
+
+      }
+
+      div.arrowleft {
+        justify-self: center;
+        align-self: center;
+        font-size: 30px;
+      }
+
+      div.editnewinfos {
+        justify-self: right;
+
+        div.title {
+          border: none;
         }
       }
     }
@@ -148,13 +166,14 @@ div.details {
 
   div.detailsFile {
     display: grid;
-    grid-template-columns: repeat(3, 33.33%);
+    grid-template-columns: 40% 20% 40%;
 
     padding: 10px;
     border-bottom: 2px solid @dark-theme;
     box-shadow: inset 0px 1px 4px @dark-theme;
     cursor: pointer;
     transition: 0.2s;
+    outline: none;
 
     div.infos, div.newinfos {
       display: grid;
@@ -196,7 +215,19 @@ div.details {
   }
 }
 
+div.button.search {
+  justify-self: right;
+}
+
+div.button.disabledbutton {
+  opacity: 0.6;
+  outline: none;
+}
+
 div.button {
+
+
+  display: inline-block;
 
   button {
     border: none;
