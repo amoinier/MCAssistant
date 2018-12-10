@@ -32,7 +32,7 @@ class DragDrop extends Component {
                         index = utils.findElemByUuid(parsed.uuid, store.files)
                         utils.getFileRealInfo(parsed, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
                             store.files[index].rename = renames
-                            store.files[index].selected = renames[0]
+                            store.files[index].selected_index = 0
                             return each_cb(err)                
                         })
                     }
@@ -77,7 +77,7 @@ let recursiveFolderContent = (folder, cb) => {
                         index = utils.findElemByUuid(parsed.uuid, store.files)
                         utils.getFileRealInfo(parsed, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
                             store.files[index].rename = renames
-                            store.files[index].selected = renames[0]
+                            store.files[index].selected_index = 0
                         })
                     }
                     return each_cb()
@@ -102,11 +102,12 @@ let prepareParsedObj = (path) => {
     parsed.ref = React.createRef()
     parsed.type = datas.type
     parsed.year = (!parsed.year ? [datas.year] : (parsed.year != datas.year ? [parsed.year, datas.year] : [parsed.year]))
-    parsed.title = [parsed.title, datas.name].map(el => {return el ? utils.delFileExtenstion(el).normalize('NFD').replace(/[\u0300-\u036f]/g, "") : ''}).filter(Boolean)
+    parsed.title = [parsed.title, datas.name].map(el => {return el ? utils.delFileExtenstion(el).normalize('NFD').replace(/[\u0300-\u036f]/g, "") : ''}).filter(Boolean).sort((a, b) => b.length - a.length)
     parsed.path = path
     parsed.season = datas.season
     parsed.episode = datas.episode
-    parsed.rename = [];
+    parsed.rename = []
+    parsed.selected_index = -1;
     ['resolution', 'quality', 'group', 'excess', 'audio', 'codec'].map(e => delete parsed[e])
 
     if (parsed.length == 2 && parsed.title[0].replace(/\s/gmi, '').toLowerCase() == parsed.title[1].replace(/\s/gmi, '').toLowerCase()) {

@@ -27,10 +27,10 @@ class Index extends Component {
             if (elem && elem.path) {
                 let newPath
                 if (elem.type == 'series') {
-                    newPath = elem.path.replace(utils.pathToFilename(elem.path), `${elem.selected.title || elem.selected.name} (${elem.selected.first_air_date ? (elem.selected.first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(elem.season)} E${utils.twoDigitNumber(elem.episode[0])}${utils.getFileExtension(elem.path)}`.replace(/:/gmi, ''))
+                    newPath = elem.path.replace(utils.pathToFilename(elem.path), `${elem.rename[elem.selected_index].title || elem.rename[elem.selected_index].name} (${elem.rename[elem.selected_index].first_air_date ? (elem.rename[elem.selected_index].first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(elem.season)} E${utils.twoDigitNumber(elem.episode[0])}${utils.getFileExtension(elem.path)}`.replace(/:/gmi, ''))
                 }
                 else {
-                    newPath = elem.path.replace(utils.pathToFilename(elem.path), `${elem.selected.title || elem.selected.name} (${elem.selected.release_date ? (elem.selected.release_date.substr(0, 4)) : ''})${utils.getFileExtension(elem.path)}`.replace(/:/gmi, ''))
+                    newPath = elem.path.replace(utils.pathToFilename(elem.path), `${elem.rename[elem.selected_index].title || elem.rename[elem.selected_index].name} (${elem.rename[elem.selected_index].release_date ? (elem.rename[elem.selected_index].release_date.substr(0, 4)) : ''})${utils.getFileExtension(elem.path)}`.replace(/:/gmi, ''))
                 }
                 if (!fs.existsSync(newPath)) {
                     fs.rename(elem.path, newPath, (err) => {

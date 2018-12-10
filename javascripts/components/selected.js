@@ -16,7 +16,6 @@ class Selected extends Component {
         this.state = {
             rename: this.props.file.rename,
             searchName: this.props.file.title[0],
-            selected: this.props.file.selected,
             selected_index: 0,
         }
     }
@@ -25,7 +24,6 @@ class Selected extends Component {
         this.setState({
             rename: this.props.file.rename,
             searchName: this.props.file.title[0],
-            selected: this.props.file.selected,
             selected_index: 0,
         })        
     }
@@ -36,7 +34,6 @@ class Selected extends Component {
         this.setState({
             rename: this.props.file.rename,
             searchName: this.props.file.title[0],
-            selected: this.props.file.selected,
             selected_index: 0,
         })
     }
@@ -50,11 +47,10 @@ class Selected extends Component {
 
     selectOther(e) {
         this.setState({
-            selected: this.props.file.rename[e.target.value],
             selected_index: e.target.value,
         })
 
-        store.files[store.clicked_index].selected = this.props.file.rename[e.target.value]
+        store.files[store.clicked_index].selected_index = e.target.value
     }
 
     searchNewTitle(e) {
@@ -65,13 +61,12 @@ class Selected extends Component {
 
         utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.tmdb_api_key, lang: store.lang, use_year: false}, (err, renames) => {
             this.props.file.rename = renames
-            this.props.file.selected = renames[0]
+            this.props.file.selected_index = 0
             store.files[store.clicked_index].rename = renames
-            store.files[store.clicked_index].selected = renames[0]
+            store.files[store.clicked_index].selected_index = 0
 
             this.setState({
                 rename: renames,
-                selected: renames[0],
                 selected_index: 0,
             })
         })
@@ -109,14 +104,14 @@ class Selected extends Component {
                         <FontAwesomeIcon icon={faArrowRight} />
                     </div>
 
-                    {!this.state.selected ?
+                    {!this.state.selected_index < 0 ?
                         <div className='editnewinfos'>
                             ...
                         </div>
                         :
                         <div className='editnewinfos'>
                             <div className='title'>
-                                {this.state.selected.title || this.state.selected.name} {this.state.selected.release_date || this.state.selected.first_air_date ? <span className='year'>({(this.state.selected.release_date || this.state.selected.first_air_date).substr(0, 4)})</span> : ''}
+                                {this.state.rename[this.state.selected_index].title || this.state.rename[this.state.selected_index].name} {this.state.rename[this.state.selected_index].release_date || this.state.rename[this.state.selected_index].first_air_date ? <span className='year'>({(this.state.rename[this.state.selected_index].release_date || this.state.rename[this.state.selected_index].first_air_date).substr(0, 4)})</span> : ''}
                             </div>
 
                             <div className="seriesinfo">
@@ -125,9 +120,9 @@ class Selected extends Component {
                         
                             <div className='filename'>
                             {this.props.file.type == 'series' ? 
-                                `${this.state.selected.title || this.state.selected.name} (${this.state.selected.first_air_date ? (this.state.selected.first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(this.props.file.season)} E${utils.twoDigitNumber(this.props.file.episode[0])}${utils.getFileExtension(this.props.file.path)}`
+                                `${this.state.rename[this.state.selected_index].title || this.state.rename[this.state.selected_index].name} (${this.state.rename[this.state.selected_index].first_air_date ? (this.state.rename[this.state.selected_index].first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(this.props.file.season)} E${utils.twoDigitNumber(this.props.file.episode[0])}${utils.getFileExtension(this.props.file.path)}`
                             :
-                                `${this.state.selected.title || this.state.selected.name} (${this.state.selected.release_date ? (this.state.selected.release_date.substr(0, 4)) : ''})${utils.getFileExtension(this.props.file.path)}`
+                                `${this.state.rename[this.state.selected_index].title || this.state.rename[this.state.selected_index].name} (${this.state.rename[this.state.selected_index].release_date ? (this.state.rename[this.state.selected_index].release_date.substr(0, 4)) : ''})${utils.getFileExtension(this.props.file.path)}`
                             }
                             </div>
                         </div>
