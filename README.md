@@ -1,7 +1,5 @@
 # MCAssistant
 
-## Introduction
-
 MCAssistant is here to help you to fix and clean your media center folders
 
 ## Features
