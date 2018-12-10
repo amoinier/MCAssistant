@@ -1,5 +1,5 @@
 {
-  "name": "movies-renamer",
+  "name": "MCAssistant",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -63,7 +63,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amoinier/Movies-renamer.git"
+    "url": "git+https://github.com/amoinier/MCAssistant.git"
   },
   "build": {
     "appId": "your.id",
@@ -74,7 +74,7 @@
   "author": "amoinier",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/amoinier/Movies-renamer/issues"
+    "url": "https://github.com/amoinier/MCAssistant/issues"
   },
-  "homepage": "https://github.com/amoinier/Movies-renamer#readme"
+  "homepage": "https://github.com/amoinier/MCAssistant#readme"
 }
