@@ -2,7 +2,7 @@ import { observable, action } from 'mobx'
 
 class Store {
     @observable files = []
-    @observable lang = 'en-US'
+    @observable lang = 'en'
     @observable tmdb_api_key = ''
     @observable clicked_index = -1
 

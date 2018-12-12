@@ -32,8 +32,8 @@ class DragDrop extends Component {
                         index = utils.findElemByUuid(parsed.uuid, store.files)
                         utils.getFileRealInfo(parsed, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
                             store.files[index].rename = renames
-                            store.files[index].selected_index = 0
-                            return each_cb(err)                
+                            store.files[index].selected_index = renames.length > 0 ? 0 : -1
+                            return each_cb()                
                         })
                     }
 
@@ -77,7 +77,8 @@ let recursiveFolderContent = (folder, cb) => {
                         index = utils.findElemByUuid(parsed.uuid, store.files)
                         utils.getFileRealInfo(parsed, {tmdb_api_key: store.tmdb_api_key, lang: store.lang}, (err, renames) => {
                             store.files[index].rename = renames
-                            store.files[index].selected_index = 0
+                            store.files[index].selected_index = renames.length > 0 ? 0 : -1
+                            return each_cb()
                         })
                     }
                     return each_cb()

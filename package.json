@@ -1,74 +1,75 @@
 {
   "name": "MCAssistant",
   "version": "1.0.0",
-  "description": "",
+  "description": "MCAssistant is here to help you to fix and clean your media center folders",
   "main": "main.js",
   "dependencies": {
-    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-env": "^7.2.0",
     "@babel/preset-react": "^7.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.7",
     "@fortawesome/free-brands-svg-icons": "^5.4.2",
     "@fortawesome/free-regular-svg-icons": "^5.4.2",
-    "@fortawesome/free-solid-svg-icons": "^5.4.2",
+    "@fortawesome/free-solid-svg-icons": "^5.6.0",
     "@fortawesome/react-fontawesome": "^0.1.3",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
-    "get-video-info": "^1.0.0",
-    "i": "^0.3.6",
-    "mediainfo-parser": "^1.1.5",
-    "mobx": "^5.5.2",
-    "mobx-react": "^5.3.6",
-    "npm": "^6.4.1",
+    "electron-is-dev": "^1.0.1",
+    "mobx": "^5.7.0",
+    "mobx-react": "^5.4.2",
+    "npm": "^6.5.0",
     "parse-torrent-name": "^0.5.4",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "react-dropzone": "^6.2.4",
-    "react-fontawesome": "^1.6.1",
-    "react-router-dom": "^4.3.1",
     "uuid": "^3.3.2",
     "video-name-parser": "^1.4.6",
     "webpack-cli": "^3.1.2"
   },
   "devDependencies": {
-    "electron-prebuilt": "^1.4.13",
-    "electron": "^4.0.0-nightly.20181010",
-    "@babel/core": "^7.1.6",
-    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-decorators": "^7.2.0",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-preset-mobx": "^2.0.0",
     "css-loader": "^1.0.1",
+    "electron": "^4.0.0-nightly.20181010",
     "electron-builder": "^20.38.0",
     "electron-packager": "^12.2.0",
-    "electron-rebuild": "^1.8.2",
-    "less": "^3.8.1",
+    "electron-prebuilt": "^1.4.13",
+    "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "node-libs-browser": "^2.1.0",
     "style-loader": "^0.23.1",
-    "webpack": "^4.23.1",
-    "webpack-dev-server": "^3.1.10",
-    "webpack-node-externals": "^1.7.2"
+    "webpack": "^4.27.1",
+    "webpack-dev-server": "^3.1.10"
   },
   "scripts": {
     "test": "nodemon main.js",
-    "start": "./node_modules/electron-prebuilt/dist/electron .",
-    "watch": "./node_modules/.bin/webpack-dev-server",
-    "electron-rebuild": "./node_modules/.bin/electron-rebuild",
+    "start": "electron .",
+    "watch": "webpack-dev-server",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "webpack && electron-builder -mwl",
+    "dist-linux": "webpack && electron-builder"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amoinier/MCAssistant.git"
   },
   "build": {
-    "appId": "your.id",
+    "appId": "com.electron.mcassistant",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.utilities",
+      "target": "zip"
+    },
+    "win": {
+      "target": "portable"
+    },
+    "linux": {
+      "category": "public.app-category.utilities"
     }
   },
   "author": "amoinier",

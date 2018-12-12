@@ -1,11 +1,13 @@
-var webpack = require('webpack')
-var nodeExternals = require('webpack-node-externals')
+const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
   mode: 'development',
   entry: {
-    app: ['webpack/hot/dev-server', path.resolve(__dirname, 'javascripts/entry.js')]
+    app: [
+      'webpack/hot/dev-server',
+      path.resolve(__dirname, 'javascripts/entry.js')
+    ]
   },
   output: {
     path: path.resolve(__dirname, 'public/built'),

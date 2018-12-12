@@ -61,9 +61,9 @@ class Selected extends Component {
 
         utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.tmdb_api_key, lang: store.lang, use_year: false}, (err, renames) => {
             this.props.file.rename = renames
-            this.props.file.selected_index = 0
+            this.props.file.selected_index = renames.length > 0 ? 0 : -1
             store.files[store.clicked_index].rename = renames
-            store.files[store.clicked_index].selected_index = 0
+            store.files[store.clicked_index].selected_index = renames.length > 0 ? 0 : -1
 
             this.setState({
                 rename: renames,
@@ -82,7 +82,7 @@ class Selected extends Component {
         return (
             <div className='selected'>
                 <div className='title'>
-                    {utils.wordLetterUppercase(this.props.file.title[0])} {this.props.file.year ? <span className='year'>({this.props.file.year})</span> : ''}
+                    {utils.wordLetterUppercase(this.props.file.title[0])} {this.props.file.year > 0 && this.props.elem.year[0] ? <span className='year'>({this.props.file.year[0]})</span> : ''}
                 </div>
 
                 <div className='editpart'>
@@ -104,7 +104,7 @@ class Selected extends Component {
                         <FontAwesomeIcon icon={faArrowRight} />
                     </div>
 
-                    {!this.state.selected_index < 0 ?
+                    {this.state.selected_index == -1 ?
                         <div className='editnewinfos'>
                             ...
                         </div>
