@@ -11,7 +11,7 @@ import store from '../tools/store';
 
 let Icon = (props) => {
     return (
-        <div className='icons' style={props.style} onClick={props.onClick}>
+        <div className={`icons ${props.className}`} style={props.style} onClick={props.onClick}>
             <FontAwesomeIcon icon={props.icon} />
         </div>
     )
@@ -20,15 +20,27 @@ let Icon = (props) => {
 @observer
 class Sidebar extends Component {
 
-    changeChargedComponent(component) {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            selected_icon: 1
+        }
+    }
+
+    changeChargedComponent(component, indexIcon) {
         store.charged_component = component
+
+        this.setState({
+            selected_icon: indexIcon
+        })
     }
 
     render() {
         return (
             <div className='sidebar'>
-                <Icon icon={faFile} onClick={() => {this.changeChargedComponent(<Renamer />)}} />
-                <Icon icon={faCog} style={{gridRow: -2}} onClick={() => {this.changeChargedComponent(<Settings />)}} />
+                <Icon icon={faFile} className={this.state.selected_icon == 1 ? 'selected' : ''} onClick={() => {this.changeChargedComponent(<Renamer />, 1)}} />
+                <Icon icon={faCog} className={this.state.selected_icon == 10 ? 'selected' : ''} style={{gridRow: -2}} onClick={() => {this.changeChargedComponent(<Settings />, 10)}} />
             </div>
         )
     }

@@ -1,8 +1,4 @@
 module.exports = [{
-    "iso_639_1": "xx",
-    "english_name": "No Language",
-    "name": "No Language"
-}, {
     "iso_639_1": "aa",
     "english_name": "Afar",
     "name": ""

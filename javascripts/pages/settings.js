@@ -9,10 +9,31 @@ import '../../less/settings.less'
 
 import store from '../tools/store.js';
 import utils from '../tools/utils.js';
+import langs from '../tools/langs.js';
+import { lookup } from 'dns';
+
+let Setting = (props) => {
+    return (
+        <div className='settingblock'>
+                <div className='title'>
+                    {props.title} :
+                </div>
+
+                <div className='content'>
+                    {props.children}
+                </div>
+            </div>
+    )
+}
 
 
 @observer
 class Settings extends Component {
+
+    changeData(e) {
+        store[e.target.dataset.field] = e.target.value
+    }
+    
 
     render() {
         return (
@@ -23,10 +44,23 @@ class Settings extends Component {
                     </div>
                 </div>
                 <div className='body'>
-                    Settings
-                </div>
-                <div className='footer'>
-                    Settings
+
+                    <Setting title='Language'>
+                        <select value={store.lang} data-field='lang' onChange={this.changeData.bind(this)}>
+                            {langs.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map((elem) => {
+                                if (!elem.name)
+                                    return null
+                                return (
+                                    <option key={elem.iso_639_1} value={elem.iso_639_1}>{elem.name}</option>
+                                )
+                            })}
+                        </select>
+                    </Setting>
+
+                    <Setting title='TMDB API key'>
+                        <input type="text" value={store.tmdb_api_key} data-field='tmdb_api_key' onChange={this.changeData.bind(this)} />
+                    </Setting>
+
                 </div>
             </div>
         )

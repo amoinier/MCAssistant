@@ -1,7 +1,8 @@
 @import "color.less";
 
 div.settings {
-    grid-template-rows: 10vh auto 10vh;
+    grid-template-rows: 5vh auto;
+
     div.header {
         display: grid;
         grid-template-rows: auto 1fr;
@@ -21,5 +22,36 @@ div.settings {
 
     div.body {
         padding: 10px;
+        display: grid;
+        grid-template-rows: repeat(10, 10vh);
+        grid-row-gap: 10px;
+
+        div.settingblock {
+            border-radius: 4px;
+            padding: 10px;
+            background-color: @dark-theme;
+            color: @white;
+            margin-bottom: 10px;
+
+            div.content {
+                padding: 10px;
+            }
+
+            input, select {
+                padding: 10px;
+                border-radius: 3px;
+                border: none;
+                background-color: @light-theme;
+                color: @white;
+                outline: none;
+                width: 100%;
+                box-sizing: border-box;
+                -webkit-box-sizing:border-box;
+                -moz-box-sizing: border-box;
+              }
+    
+              select {
+              }
+        }
     }
 }
