@@ -5,6 +5,7 @@ class Store {
     @observable lang = 'en'
     @observable tmdb_api_key = ''
     @observable clicked_index = -1
+    @observable charged_component = null
 
     @action addFile(file) {
         this.files = this.files.concat(file);

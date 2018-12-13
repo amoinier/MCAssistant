@@ -1,0 +1,21 @@
+@import "color.less";
+
+div.sidebar {
+    display: grid;
+    grid-template-rows: repeat(10, 10vh);
+
+    background-color: @dark-theme;
+
+    div.icons {
+        font-size: 30px;
+        padding-top: calc(5vh - 15px);
+        padding-left: calc(3vh - 15px);
+        color: @white;
+        opacity: 0.4;
+        cursor: pointer;
+    }
+
+    div.icons.selected {
+        opacity: 1;
+    }
+}

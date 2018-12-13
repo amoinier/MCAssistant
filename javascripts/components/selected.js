@@ -31,11 +31,13 @@ class Selected extends Component {
     componentWillReceiveProps(nextProps) {
         this.props = nextProps
 
-        this.setState({
-            rename: this.props.file.rename,
-            searchName: this.props.file.title[0],
-            selected_index: 0,
-        })
+        if (this.props.file) {
+            this.setState({
+                rename: this.props.file.rename,
+                searchName: this.props.file.title[0],
+                selected_index: 0,
+            })
+        }
     }
 
     changeStartName(e) {
@@ -82,7 +84,7 @@ class Selected extends Component {
         return (
             <div className='selected'>
                 <div className='title'>
-                    {utils.wordLetterUppercase(this.props.file.title[0])} {this.props.file.year > 0 && this.props.elem.year[0] ? <span className='year'>({this.props.file.year[0]})</span> : ''}
+                    {utils.wordLetterUppercase(this.props.file.title[0])} {this.props.file.year > 0 && this.props.file.year[0] ? <span className='year'>({this.props.file.year[0]})</span> : ''}
                 </div>
 
                 <div className='editpart'>
@@ -104,7 +106,7 @@ class Selected extends Component {
                         <FontAwesomeIcon icon={faArrowRight} />
                     </div>
 
-                    {this.state.selected_index == -1 ?
+                    {this.state.selected_index == -1 || this.state.rename.length == 0 ?
                         <div className='editnewinfos'>
                             ...
                         </div>

@@ -1,0 +1,209 @@
+@import "color.less";
+
+
+div.renamer {
+    div.header {
+      display: grid;
+      grid-template-rows: 1fr;
+  
+      box-shadow: inset -2px 3px 10px @dark-theme;
+  
+      div.selected {
+        display: grid;
+        grid-template-rows: auto 1fr;
+  
+        padding: 10px;
+        color: @white;
+  
+        div.title {
+          font-size: 30px;
+          border-bottom: 2px solid @dark-theme;
+          border-radius: 2px;
+          padding-bottom: 10px;
+          padding-left: 10px;
+  
+          span.year {
+            font-style: italic;
+          }
+        }
+  
+        div.editpart {
+          display: grid;
+          grid-template-columns: 40% 20% 40%;
+  
+          padding: 10px 0px;
+  
+          div.editname {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+  
+            input, select {
+              padding: 10px;
+              border: none;
+              background-color: @dark-theme;
+              color: @white;
+              outline: none;
+            }
+  
+            select {
+              margin-bottom: 10px;
+              width: 100%;
+            }
+  
+            div.edittitle {
+              display: grid;
+              grid-template-columns: 70% auto;
+  
+              margin-top: 10px;
+            }
+  
+          }
+  
+          div.arrowleft {
+            justify-self: center;
+            align-self: center;
+            font-size: 30px;
+          }
+  
+          div.editnewinfos {
+            justify-self: right;
+  
+            div.title {
+              border: none;
+              text-align: right;
+            }
+  
+            div.filename {
+              font-style: italic;
+              font-size: 16px;
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+  
+    div.body {
+      grid-row: 2;
+      display: grid;
+  
+      background-color: @light-theme;
+      box-shadow: inset 0px 3px 10px @dark-theme;
+    }
+  
+    div.footer {
+      grid-row: 3;
+      display: grid;
+  
+      box-shadow: inset -2px 3px 10px @dark-theme;
+      padding: 10px;
+      justify-content: right;
+      align-items: center;
+    }
+  
+    div.dragdrop {
+      align-items: center;
+      display: grid;
+  
+      color: @dark-theme;
+      font-size: 30px;
+  
+      div.hidedrag {
+        padding: 0;
+        border: none;
+      }
+  
+      div.blockdrag {
+        padding: 100px;
+        border: 5px dashed @dark-theme;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+  
+      div.logo {
+        display: grid;
+        justify-items: center;
+  
+        font-size: 60px;
+        padding: 10px;
+      }
+    }
+  
+    div.details {
+      display: grid;
+      grid-auto-rows: 10vh;
+  
+      overflow-y: scroll;
+      height: 70.5vh;
+      color: @white;
+      // text-shadow: -2px 0 @dark-theme, 0 2px @dark-theme, 2px 0 @dark-theme, 0 -2px @dark-theme;
+  
+      div.detailsclicked {
+        background-color: @dark-theme;
+      }
+  
+      div.detailsFile {
+        display: grid;
+        grid-template-columns: 40% 20% 40%;
+  
+        padding: 10px;
+        border-bottom: 2px solid @dark-theme;
+        box-shadow: inset 0px -1px 4px @dark-theme;
+        cursor: pointer;
+        transition: 0.2s;
+        outline: none;
+  
+        div.infos, div.newinfos {
+          display: grid;
+          grid-template-rows: repeat(3, 33.33%);
+  
+          word-break: break-word;
+  
+          div.title {
+            font-size: 20px;
+            font-weight: bold;
+          }
+  
+          div.seriesinfo {
+            font-style: italic;
+            font-size: 16px;
+            align-self: center;
+          }
+      
+          span.year {
+            font-style: italic;
+            font-size: 16px;
+          }
+  
+          div.filename {
+            font-style: italic;
+            font-size: 16px;
+          }
+        }
+  
+        div.newinfos {
+          div.title {
+            text-align: right;
+          }
+  
+          div.seriesinfo {
+            text-align: right;
+          }
+  
+          div.filename {
+            text-align: right;
+          }
+        }
+  
+        div.arrowleft {
+          justify-self: center;
+          align-self: center;
+        }
+  
+        div.newinfos {
+          justify-self: right;
+        }
+  
+      }
+    }
+  }

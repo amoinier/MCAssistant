@@ -1,0 +1,25 @@
+@import "color.less";
+
+div.settings {
+    grid-template-rows: 10vh auto 10vh;
+    div.header {
+        display: grid;
+        grid-template-rows: auto 1fr;
+  
+        padding: 10px;
+        color: @white;
+        
+        div.title {
+            font-size: 30px;
+            border-bottom: 2px solid @dark-theme;
+            border-radius: 2px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+    
+          }
+    }
+
+    div.body {
+        padding: 10px;
+    }
+}
