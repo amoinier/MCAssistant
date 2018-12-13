@@ -20,6 +20,7 @@ class Index extends Component {
 
     componentWillMount() {
         store.charged_component = <Renamer />
+        store.getConfigFile()
     }
 
     render() {
