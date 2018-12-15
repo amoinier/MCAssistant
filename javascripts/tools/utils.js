@@ -1,6 +1,7 @@
 let async = require('async')
 let axios = require('axios')
 
+const providers = require('../tools/providers')
 
 module.exports = {
     listExtensions: () => {
@@ -63,25 +64,31 @@ module.exports = {
 
         async.eachOfLimit(file.proposals, 3, (tit, tkey, tcb) => {
             async.eachOfLimit(file.year, 3, (yea, ykey, ycb) => {
-                let url
+                async.eachOfLimit(option.providers, 3, (prov, pkey, pcb) => {
+                    let url
+                    let index = providers.filter((elem) => elem.name == prov)
 
-                yea = option.use_year ? yea : null
-    
-                if (file.type == 'series') {
-                    url = `https://api.themoviedb.org/3/search/tv?api_key=${option.tmdb_api_key}&language=${option.lang}&query=${tit}&page=1&include_adult=true`;
-                }
-                else {
-                    url = `https://api.themoviedb.org/3/search/movie?api_key=${option.tmdb_api_key}&language=${option.lang}&query=${tit}${yea ? `&primary_release_year=${yea}` : ``}&page=1&include_adult=true`;
-                }
-                axios.get(url)
-                .then(resp => {
-                    renames = renames.concat(resp.data.results)
+                    yea = option.use_year ? yea : null
+        
+                    if (file.type == 'series') {
+                        url = `https://api.themoviedb.org/3/search/tv?api_key=${option.tmdb_api_key}&language=${option.lang}&query=${tit}`;
+                    }
+                    else {
+                        url = `https://api.themoviedb.org/3/search/movie?api_key=${option.tmdb_api_key}&language=${option.lang}&query=${tit}${yea ? `&primary_release_year=${yea}` : ``}`;
+                    }
+                    axios.get(url)
+                    .then(resp => {
+                        renames = renames.concat(resp.data.results)
 
-                    return ycb()
-                })
-                .catch(err => {
+                        return pcb()
+                    })
+                    .catch(err => {
+                        return pcb(err)
+                    })
+                }, (err) => {
                     return ycb(err)
                 })
+
             }, (err) => {
                 return tcb(err)
             })

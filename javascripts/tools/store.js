@@ -5,7 +5,8 @@ class Store {
     @observable files = []
     @observable settings = {
         lang: 'en',
-        tmdb_api_key: ''
+        tmdb_api_key: '',
+        providers: ['TMDB']
     }
     @observable clicked_index = -1
     @observable charged_component = null

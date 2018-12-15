@@ -61,7 +61,7 @@ class Selected extends Component {
         this.props.file.proposals = utils.getAllProposalNames(this.state.searchName)
         store.files[store.clicked_index].proposals = utils.getAllProposalNames(this.state.searchName)
 
-        utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, use_year: false}, (err, renames) => {
+        utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.provisers, use_year: false}, (err, renames) => {
             this.props.file.rename = renames
             this.props.file.selected_index = renames.length > 0 ? 0 : -1
             store.files[store.clicked_index].rename = renames

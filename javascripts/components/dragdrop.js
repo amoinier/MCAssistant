@@ -30,7 +30,7 @@ class DragDrop extends Component {
                         let parsed = prepareParsedObj(elem.path)
                         store.addFile(parsed)
                         index = utils.findElemByUuid(parsed.uuid, store.files)
-                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang}, (err, renames) => {
+                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers}, (err, renames) => {
                             store.files[index].rename = renames
                             store.files[index].selected_index = renames.length > 0 ? 0 : -1
                             return each_cb()                
@@ -75,13 +75,15 @@ let recursiveFolderContent = (folder, cb) => {
                         let parsed = prepareParsedObj(`${folder}/${elem}`)
                         store.addFile(parsed)
                         index = utils.findElemByUuid(parsed.uuid, store.files)
-                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang}, (err, renames) => {
+                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers}, (err, renames) => {
                             store.files[index].rename = renames
                             store.files[index].selected_index = renames.length > 0 ? 0 : -1
                             return each_cb()
                         })
                     }
-                    return each_cb()
+                    else {
+                        return each_cb()
+                    }
                 }
                 else if (fs.lstatSync(`${folder}/${elem}`).isDirectory()) {
                     recursiveFolderContent(`${folder}/${elem}`, (err) => {

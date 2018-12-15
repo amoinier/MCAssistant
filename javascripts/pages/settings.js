@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFile, faCog } from '@fortawesome/free-solid-svg-icons'
 
 import '../../less/settings.less'
 
 import store from '../tools/store.js';
 import langs from '../tools/langs.js';
+import providers from '../tools/providers.js';
 
 let Setting = (props) => {
     return (
         <div className='settingblock'>
                 <div className='title'>
-                    {props.title} :
+                    {props.icon ? <FontAwesomeIcon icon={props.icon} /> : ''} {props.title}
                 </div>
 
                 <div className='content'>
@@ -29,6 +32,18 @@ class Settings extends Component {
         store.writeConfig()
     }
     
+    changeProviders(e) {
+        if (!e.target.checked) {
+            if (store.settings.providers.indexOf(e.target.name) != -1)
+                store.settings.providers.splice(store.settings.providers.indexOf(e.target.name), 1)
+            }
+        else {
+            if (store.settings.providers.indexOf(e.target.name) == -1)
+                store.settings.providers.push(e.target.name)
+        }
+
+        store.writeConfig()
+    }
 
     render() {
         return (
@@ -40,20 +55,39 @@ class Settings extends Component {
                 </div>
                 <div className='body'>
 
-                    <Setting title='Language'>
-                        <select value={store.settings.lang} data-field='lang' onChange={this.changeData.bind(this)}>
-                            {langs.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map((elem) => {
-                                if (!elem.name)
-                                    return null
-                                return (
-                                    <option key={elem.iso_639_1} value={elem.iso_639_1}>{elem.name}</option>
-                                )
-                            })}
-                        </select>
+                    <Setting title='General'  icon={faCog}>
+                        <div className='block'>
+                            <div className='subtitle'>Language</div>
+                            <select value={store.settings.lang} data-field='lang' onChange={this.changeData.bind(this)}>
+                                {langs.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map((elem) => {
+                                    if (!elem.name)
+                                        return null
+                                    return (
+                                        <option key={elem.iso_639_1} value={elem.iso_639_1}>{elem.name}</option>
+                                    )
+                                })}
+                            </select>
+                        </div>
+                        
+                        <div className='block'>
+                            <div className='subtitle'>TMDB API key</div>
+                            <input type='text' value={store.settings.tmdb_api_key} data-field='tmdb_api_key' onChange={this.changeData.bind(this)} />
+                        </div>
+                        
                     </Setting>
 
-                    <Setting title='TMDB API key'>
-                        <input type="text" value={store.settings.tmdb_api_key} data-field='tmdb_api_key' onChange={this.changeData.bind(this)} />
+                    <Setting title='Renamer' icon={faFile}>
+                        <div className='block'>
+                            <div className='subtitle'>Providers</div>
+                            {providers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map((elem, index) => {
+                                return (
+                                    <span key={elem.name} style={{display: 'inline-grid', gridTemplateColumns: 'auto auto', alignItems: 'center'}}>
+                                        <input type='checkbox' name={elem.name} defaultChecked={store.settings.providers.indexOf(elem.name) != -1 ? true : false} onChange={this.changeProviders.bind(this)}/>
+                                        {elem.name}
+                                    </span>
+                                )
+                            })}
+                        </div>
                     </Setting>
 
                 </div>
