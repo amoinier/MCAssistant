@@ -2,20 +2,33 @@
 
 div.sidebar {
     display: grid;
-    grid-template-rows: repeat(10, 10vh);
+    grid-template-rows: repeat(14, 7vh);
 
     background-color: @dark-theme;
 
     div.icons {
         font-size: 30px;
-        padding-top: calc(5vh - 15px);
-        padding-left: calc(3vh - 15px);
+        padding-top: calc(3.5vh - 15px);
+        padding-left: calc(50% - 15px);
         color: @white;
         opacity: 0.4;
         cursor: pointer;
     }
 
     div.icons.selected {
+        opacity: 1;
+    }
+
+    div.title {
+        text-align: center;
+        opacity: 0.4;
+
+        span {
+            color: @white;
+        }
+    }
+
+    div.title.selected {
         opacity: 1;
     }
 }

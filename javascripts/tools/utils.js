@@ -10,6 +10,22 @@ module.exports = {
     pathToFilename: (path) => {
         return path.substr(path.lastIndexOf('/') + 1, path.length)
     },
+    translatePath: (stringPath, elem) => {
+        let path = stringPath
+
+        while(path.match(/:([A-Za-z\_]*?)?:/gmi)) {
+            console.log(path.match(/:([A-Za-z\_]*?)?:/gmi));
+            
+            let read = new RegExp(/:([A-Za-z\_]*?)?:/gmi).exec(path)
+
+            if (read.length !== 0 && read[1]) {
+                path = path.replace(`:${read[1]}:`, elem[read[1]] || '')
+            }
+        }
+
+        return `${path}${module.exports.getFileExtension(elem.path)}`
+        
+    },
     wordLetterUppercase: (text) => {
         if (!text)
             return null
@@ -60,17 +76,17 @@ module.exports = {
         return null
     },
     getFileRealInfo: (file, option, cb) => {
-        let renames = []
+        let renames = []   
 
         async.eachOfLimit(file.proposals, 3, (tit, tkey, tcb) => {
-            async.eachOfLimit(file.year, 3, (yea, ykey, ycb) => {
+            async.eachOfLimit(file.years, 3, (yea, ykey, ycb) => {
                 async.eachOfLimit(option.providers, 3, (prov, pkey, pcb) => {
                     let url
                     let index = providers.filter((elem) => elem.name == prov)
 
                     yea = option.use_year ? yea : null
         
-                    if (file.type == 'series') {
+                    if (option.type == 'shows') {
                         url = `https://api.themoviedb.org/3/search/tv?api_key=${option.tmdb_api_key}&language=${option.lang}&query=${tit}`;
                     }
                     else {

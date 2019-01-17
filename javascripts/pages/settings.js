@@ -28,7 +28,8 @@ let Setting = (props) => {
 class Settings extends Component {
 
     changeData(e) {
-        store.settings[e.target.dataset.field] = e.target.value
+        
+        store.settings[e.target.dataset.field].path = e.target.value
         store.writeConfig()
     }
     
@@ -42,6 +43,12 @@ class Settings extends Component {
                 store.settings.providers.push(e.target.name)
         }
 
+        store.writeConfig()
+    }
+
+    changePoster(e) {
+        store.settings[e.target.name].poster = e.target.checked     
+        
         store.writeConfig()
     }
 
@@ -87,6 +94,29 @@ class Settings extends Component {
                                     </span>
                                 )
                             })}
+                        </div>
+
+                        <div className='block'>
+                            <div className='subtitle'>File path</div>
+                            <div className='subblock'>
+                            <div className='subtitle'>Movies</div>
+                                <input type='text' value={store.settings.movies.path} data-field='movies' onChange={this.changeData.bind(this)} />
+                                <div className='desc'>Possible infos: :title: - :original_title: - :year:</div>
+                                <span style={{display: 'inline-grid', gridTemplateColumns: 'auto auto', alignItems: 'center'}}>
+                                    <input type='checkbox' name='movies' defaultChecked={store.settings.movies.poster} onChange={this.changePoster.bind(this)}/>
+                                    Download poster
+                                </span>
+                            </div>
+                            
+                            <div className='subblock'>
+                                <div className='subtitle'>TV shows</div>
+                                <input type='text' value={store.settings.shows.path} data-field='shows' onChange={this.changeData.bind(this)} />
+                                <div className='desc'>Possible infos: :title: - :original_title: - :year: - :season: - :episode:</div>
+                                <span style={{display: 'inline-grid', gridTemplateColumns: 'auto auto', alignItems: 'center'}}>
+                                    <input type='checkbox' name='shows' defaultChecked={store.settings.shows.poster} onChange={this.changePoster.bind(this)}/>
+                                    Download poster
+                                </span>
+                            </div>
                         </div>
                     </Setting>
 

@@ -30,9 +30,12 @@ class DragDrop extends Component {
                         let parsed = prepareParsedObj(elem.path)
                         store.addFile(parsed)
                         index = utils.findElemByUuid(parsed.uuid, store.files)
-                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers}, (err, renames) => {
-                            store.files[index].rename = renames
-                            store.files[index].selected_index = renames.length > 0 ? 0 : -1
+                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers, type: store.charged_type}, (err, renames) => {
+                            if (!err && renames.length !== 0) {
+                                store.files[index].rename = renames
+                                store.files[index].selected_index = renames.length > 0 ? 0 : -1
+                            }
+                            
                             return each_cb()                
                         })
                     }
@@ -68,17 +71,20 @@ let recursiveFolderContent = (folder, cb) => {
             return cb()
         }
         else {
-            async.eachOfLimit(files, 3, (elem, index, each_cb) => {
+            async.eachOfLimit(files, 5, (elem, index, each_cb) => {
                 if (!fs.lstatSync(`${folder}/${elem}`).isSymbolicLink() && !fs.lstatSync(`${folder}/${elem}`).isDirectory()) {
                     if (!checkPathFile(`${folder}/${elem}`)) {
                         let index
                         let parsed = prepareParsedObj(`${folder}/${elem}`)
                         store.addFile(parsed)
                         index = utils.findElemByUuid(parsed.uuid, store.files)
-                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers}, (err, renames) => {
-                            store.files[index].rename = renames
-                            store.files[index].selected_index = renames.length > 0 ? 0 : -1
+                        utils.getFileRealInfo(parsed, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers, type: store.charged_type}, (err, renames) => {
+                            if (!err && renames.length !== 0) {
+                                store.files[index].rename = renames
+                                store.files[index].selected_index = renames.length > 0 ? 0 : -1
+                            }
                             return each_cb()
+
                         })
                     }
                     else {
@@ -104,19 +110,19 @@ let prepareParsedObj = (path) => {
     parsed.uuid = uuidv4()
     parsed.ref = React.createRef()
     parsed.type = datas.type
-    parsed.year = (!parsed.year ? [datas.year] : (parsed.year != datas.year ? [parsed.year, datas.year] : [parsed.year]))
-    parsed.title = [parsed.title, datas.name].map(el => {return el ? utils.delFileExtenstion(el).normalize('NFD').replace(/[\u0300-\u036f]/g, "") : ''}).filter(Boolean).sort((a, b) => b.length - a.length)
+    parsed.years = (!parsed.year ? [datas.year] : (parsed.year != datas.year ? [parsed.year, datas.year] : [parsed.year]))
+    parsed.titles = [parsed.title, datas.name].map(el => {return el ? utils.delFileExtenstion(el).normalize('NFD').replace(/[\u0300-\u036f]/g, "") : ''}).filter(Boolean).sort((a, b) => b.length - a.length)
     parsed.path = path
-    parsed.season = datas.season
-    parsed.episode = datas.episode
+    parsed.season = datas.season || ''
+    parsed.episode = (datas.episode && datas.episode[0] ? datas.episode[0] : null) || ''
     parsed.rename = []
     parsed.selected_index = -1;
     ['resolution', 'quality', 'group', 'excess', 'audio', 'codec'].map(e => delete parsed[e])
 
-    if (parsed.length == 2 && parsed.title[0].replace(/\s/gmi, '').toLowerCase() == parsed.title[1].replace(/\s/gmi, '').toLowerCase()) {
-        parsed.title = [parsed.title[0]]
+    if (parsed.length == 2 && parsed.titles[0].replace(/\s/gmi, '').toLowerCase() == parsed.titles[1].replace(/\s/gmi, '').toLowerCase()) {
+        parsed.titles = [parsed.titles[0]]
     }
-    parsed.proposals = utils.getAllProposalNames(parsed.title[0])
+    parsed.proposals = utils.getAllProposalNames(parsed.titles[0])
 
     return parsed
 }

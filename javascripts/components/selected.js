@@ -15,7 +15,7 @@ class Selected extends Component {
 
         this.state = {
             rename: this.props.file.rename,
-            searchName: this.props.file.title[0],
+            searchName: this.props.file.titles[0],
             selected_index: 0,
         }
     }
@@ -23,7 +23,7 @@ class Selected extends Component {
     componentDidMount() {
         this.setState({
             rename: this.props.file.rename,
-            searchName: this.props.file.title[0],
+            searchName: this.props.file.titles[0],
             selected_index: 0,
         })        
     }
@@ -34,7 +34,7 @@ class Selected extends Component {
         if (this.props.file) {
             this.setState({
                 rename: this.props.file.rename,
-                searchName: this.props.file.title[0],
+                searchName: this.props.file.titles[0],
                 selected_index: 0,
             })
         }
@@ -61,16 +61,23 @@ class Selected extends Component {
         this.props.file.proposals = utils.getAllProposalNames(this.state.searchName)
         store.files[store.clicked_index].proposals = utils.getAllProposalNames(this.state.searchName)
 
-        utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.provisers, use_year: false}, (err, renames) => {
-            this.props.file.rename = renames
-            this.props.file.selected_index = renames.length > 0 ? 0 : -1
-            store.files[store.clicked_index].rename = renames
-            store.files[store.clicked_index].selected_index = renames.length > 0 ? 0 : -1
+        utils.getFileRealInfo(this.props.file, {tmdb_api_key: store.settings.tmdb_api_key, lang: store.settings.lang, providers: store.settings.providers, use_year: false, type: store.charged_type}, (err, renames) => {
+            if (err || renames.length == 0) {
+                this.setState({
+                    searchName: '',
+                })
+            }
+            else {
+                this.props.file.rename = renames
+                this.props.file.selected_index = renames.length > 0 ? 0 : -1
+                store.files[store.clicked_index].rename = renames
+                store.files[store.clicked_index].selected_index = renames.length > 0 ? 0 : -1
 
-            this.setState({
-                rename: renames,
-                selected_index: 0,
-            })
+                this.setState({
+                    rename: renames,
+                    selected_index: 0,
+                })
+            }
         })
     }
 
@@ -80,11 +87,15 @@ class Selected extends Component {
         }
     }
 
+    editNumber(e) {
+        this.props.file[e.target.name] = e.target.value
+    }
+
     render() {
         return (
             <div className='selected'>
                 <div className='title'>
-                    {utils.wordLetterUppercase(this.props.file.title[0])} {this.props.file.year > 0 && this.props.file.year[0] ? <span className='year'>({this.props.file.year[0]})</span> : ''}
+                    {utils.wordLetterUppercase(this.props.file.titles[0])} {this.props.file.years > 0 && this.props.file.years[0] ? <span className='year'>({this.props.file.years[0]})</span> : ''}
                 </div>
 
                 <div className='editpart'>
@@ -117,12 +128,12 @@ class Selected extends Component {
                             </div>
 
                             <div className="seriesinfo">
-                                {this.props.file.type == 'series' ? `S${utils.twoDigitNumber(this.props.file.season)} E${utils.twoDigitNumber(this.props.file.episode[0])}` : ''}
+                                {store.charged_type === 'shows' ? <div>S<input value={utils.twoDigitNumber(this.props.file.season)} name='season' onChange={this.editNumber.bind(this)} /> E<input value={utils.twoDigitNumber(this.props.file.episode)} name='episode' onChange={this.editNumber.bind(this)} /></div> : ''}
                             </div>
                         
                             <div className='filename'>
-                            {this.props.file.type == 'series' ? 
-                                `${this.state.rename[this.state.selected_index].title || this.state.rename[this.state.selected_index].name} (${this.state.rename[this.state.selected_index].first_air_date ? (this.state.rename[this.state.selected_index].first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(this.props.file.season)} E${utils.twoDigitNumber(this.props.file.episode[0])}${utils.getFileExtension(this.props.file.path)}`
+                            {store.charged_type === 'shows' ? 
+                                `${this.state.rename[this.state.selected_index].title || this.state.rename[this.state.selected_index].name} (${this.state.rename[this.state.selected_index].first_air_date ? (this.state.rename[this.state.selected_index].first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(this.props.file.season)} E${utils.twoDigitNumber(this.props.file.episode)}${utils.getFileExtension(this.props.file.path)}`
                             :
                                 `${this.state.rename[this.state.selected_index].title || this.state.rename[this.state.selected_index].name} (${this.state.rename[this.state.selected_index].release_date ? (this.state.rename[this.state.selected_index].release_date.substr(0, 4)) : ''})${utils.getFileExtension(this.props.file.path)}`
                             }

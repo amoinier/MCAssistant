@@ -6,10 +6,19 @@ class Store {
     @observable settings = {
         lang: 'en',
         tmdb_api_key: '',
-        providers: ['TMDB']
+        providers: ['TMDB'],
+        shows: {
+            path: './:original_title: (:year:) - S:season: E:episode:',
+            poster: false,
+        },
+        movies: {
+            path: './:original_title: (:year:)',
+            poster: false
+        }
     }
     @observable clicked_index = -1
     @observable charged_component = null
+    @observable chaged_type = null
 
     @action addFile(file) {
         this.files = this.files.concat(file);
@@ -28,7 +37,7 @@ class Store {
     }
 
     @action writeConfig() {
-        let userhome = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
+        let userhome = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
 
         if (!fs.existsSync(`${userhome}/.MCAssistant.conf`)) {
             fs.openSync(`${userhome}/.MCAssistant.conf`, 'w');
@@ -39,7 +48,7 @@ class Store {
     }
 
     @action getConfigFile() {
-        let userhome = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
+        let userhome = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
 
         fs.readFile(`${userhome}/.MCAssistant.conf`, (err, data) => {
             if (err) {

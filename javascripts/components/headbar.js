@@ -21,7 +21,7 @@ class Headbar extends Component {
                     </div>
 
                     <div className='title'>
-                        {store.clicked_index >= 0 ? `${utils.wordLetterUppercase(store.files[store.clicked_index].title[0])} ${store.files[store.clicked_index].year > 0 && store.files[store.clicked_index].year[0] ? <span className='year'>({store.files[store.clicked_index].year[0]})</span> : ''}` : ''}
+                        {store.clicked_index >= 0 ? `${utils.wordLetterUppercase(store.files[store.clicked_index].titles[0])} ${store.files[store.clicked_index].years > 0 && store.files[store.clicked_index].years[0] ? <span className='year'>({store.files[store.clicked_index].years[0]})</span> : ''}` : ''}
                     </div>
                 </div>
 
