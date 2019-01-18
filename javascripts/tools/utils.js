@@ -1,5 +1,6 @@
 let async = require('async')
 let axios = require('axios')
+let fs = require('fs')
 
 const providers = require('../tools/providers')
 
@@ -112,4 +113,27 @@ module.exports = {
             return cb(err, renames)
         })
     },
+    downloadImg: (activate, newPath, datas, cb) => {
+        if (activate && datas.poster_path) {
+            axios({
+                method: 'get',
+                url: `https://image.tmdb.org/t/p/w300/${datas.poster_path}`,
+                responseType: 'arraybuffer'
+            }).then(response => {
+                if (!response || !response.data) {
+                    return cb('axios problem')
+                }
+                else {
+                    let base64 = new Buffer(response.data, 'binary').toString('base64')
+
+                    fs.writeFile(`${module.exports.delFileExtenstion(newPath)}.jpg`, base64, 'base64', function(err) {
+                        return cb(err)
+                    })
+                }
+            })
+        }
+        else {
+            return cb()
+        }
+    }
 }

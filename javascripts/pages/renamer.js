@@ -34,19 +34,13 @@ class Renamer extends Component {
                 let newPath
                 let rename = elem.rename[elem.selected_index]
 
-                if (store.charged_type === 'shows') {
-                    newPath = elem.path.replace(utils.pathToFilename(elem.path), `${rename.title || rename.name} (${rename.first_air_date ? (rename.first_air_date.substr(0, 4)) : ''}) - S${utils.twoDigitNumber(elem.season)} E${utils.twoDigitNumber(elem.episode)}${utils.getFileExtension(elem.path)}`.replace(/:/gmi, ''))
-                }
-                else {
-                    newPath = elem.path.replace(utils.pathToFilename(elem.path), `${rename.title || rename.name} (${rename.release_date ? (rename.release_date.substr(0, 4)) : ''})${utils.getFileExtension(elem.path)}`.replace(/:/gmi, ''))
-                }
                 elem.year = rename.first_air_date ? (rename.first_air_date.substr(0, 4)) : (rename.release_date ? (rename.release_date.substr(0, 4)) : '')
                 elem.original_title = rename.original_title || rename.original_name
                 elem.title = rename.title || rename.name
                 elem.episode = utils.twoDigitNumber(elem.episode)
                 elem.season = utils.twoDigitNumber(elem.season)
 
-                newPath = elem.path.replace(utils.pathToFilename(elem.path), utils.translatePath(store.settings.shows.path, elem))
+                newPath = elem.path.replace(utils.pathToFilename(elem.path), utils.translatePath(store.settings[store.charged_type].path, elem))
                 
                 if (!fs.existsSync(newPath)) {
                     mkdirp(newPath.substr(0, newPath.lastIndexOf('/')), (err) => {
@@ -57,43 +51,22 @@ class Renamer extends Component {
                             return each_cb(err)
                         }
 
-                        // if (store.settings[store.charged_type].poster) {
-                        //     axios({
-                        //         url: 'https://image.tmdb.org/t/p/w300/lTfBP2waXVmTOGKj4BxHR265inN.jpg', //your url
-                        //         method: 'GET',
-                        //         headers: {
-                        //             'Content-Type': 'image/jpg',
-                        //           },
-                        //     }).then(response => {
-                        //         console.log(response);
-                        //         fs.writeFileSync('/home/alex/testimg.jpg', response.data);
-                                
-                        //         // response.data.pipe(fs.createWriteStream('/home/alex/testimg.jpg'))
-                        //         // fs.writeFile(`/home/alex/testimg.jpg`, Buffer.from(response.data), (err, data) => {
-                        //         //     console.log(err);
-                        //         //     console.log(data);
+                        utils.downloadImg(store.settings[store.charged_type].poster, newPath, rename, (err) => {
+                            fs.rename(elem.path, newPath, (err) => {
+                                if (err) {
+                                    console.log('cant rename');
                                     
+                                    console.log(err);
                                     
-                        //         // })
-                        //     })
-                        // }
-                        // return each_cb('xxx')
-
-                        fs.rename(elem.path, newPath, (err) => {
-                            if (err) {
-                                console.log('cant rename');
-                                
-                                console.log(err);
-                                
-                                return each_cb(err)
-                            }
-                            else {
-                                uuidToDelete.push(elem.uuid)
-                                return each_cb()
-                            }
+                                    return each_cb(err)
+                                }
+                                else {
+                                    uuidToDelete.push(elem.uuid)
+                                    return each_cb()
+                                }
+                            })
                         })
                     })
-                    
                 }
                 else {
                     console.log('already exists');
