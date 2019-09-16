@@ -28,8 +28,16 @@ let Setting = (props) => {
 class Settings extends Component {
 
     changeData(e) {
+
+        console.log(store.settings);
+        console.log(e.target.dataset.field);
+        console.log(e.target.value);
         
-        store.settings[e.target.dataset.field].path = e.target.value
+        
+        if (e.target.dataset.field === 'shows' || e.target.dataset.field === 'movies')
+            store.settings[e.target.dataset.field].path = e.target.value
+        else
+            store.settings[e.target.dataset.field] = e.target.value
         store.writeConfig()
     }
     
